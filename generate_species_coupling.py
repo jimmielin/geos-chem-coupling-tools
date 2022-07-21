@@ -37,6 +37,9 @@ parsed_spc_list.sort(key = lambda x: 0 if x[idx_Advect] == "T" else 1)
 # in coupled models such as WRF and CESM.
 #
 
+# Non-gas-phase species ("Aerosols")
+nongas = ["AERI", "ASOAN", "ASOA1", "ASOA2", "ASOA3", "ASOG1", "ASOG2", "ASOG3", "AONITA", "BCPI", "BCPO", "BrSALA", "BrSALC", "DMS", "DST1", "DST2", "DST3", "DST4", "INDIOL", "IONITA", "ISALA", "ISALC", "ISN1OA", "ISN1OG", "ISOA1", "ISOA2", "ISOA3", "MONITA", "MSA", "NH4", "NIT", "NITs", "OCPI", "OCPO", "OPOA1", "OPOA2", "POA1", "POA2", "SALA", "SALC", "SALACl", "SALAAL", "SALCAL", "SALCCl", "SO4", "SO4s", "SOAIE", "SOAGX", "SOAME", "SOAMG", "SOAP", "SOAS", "TSOA0", "TSOA1", "TSOA2", "TSOA3", "TSOG0", "TSOG1", "TSOG2", "TSOG3", "pFe", "POA1", "POA2", "POG1", "POG2"]
+
 ###################
 #  --- CESM ---   #
 ###################
@@ -51,8 +54,7 @@ cesm_aer_mass = [12.011000, 12.011000, 135.064039, 135.064039, 135.064039, 58.44
 ###################
 # --- WRF-GC ---  #
 ###################
-# WRF requires non-gas species to be separated into the end
-wrf_nongas = ["AERI", "ASOAN", "ASOA1", "ASOA2", "ASOA3", "ASOG1", "ASOG2", "ASOG3", "AONITA", "BCPI", "BCPO", "BrSALA", "BrSALC", "DMS", "DST1", "DST2", "DST3", "DST4", "INDIOL", "IONITA", "ISALA", "ISALC", "ISN1OA", "ISN1OG", "ISOA1", "ISOA2", "ISOA3", "MONITA", "MSA", "NH4", "NIT", "NITs", "OCPI", "OCPO", "OPOA1", "OPOA2", "POA1", "POA2", "SALA", "SALC", "SALACl", "SALAAL", "SALCAL", "SALCCl", "SO4", "SO4s", "SOAIE", "SOAGX", "SOAME", "SOAMG", "SOAP", "SOAS", "TSOA0", "TSOA1", "TSOA2", "TSOA3", "TSOG0", "TSOG1", "TSOG2", "TSOG3", "pFe", "POA1", "POA2", "POG1", "POG2"]
+# WRF requires non-gas species to be separated into the end. use nongas.
 
 # WRF-GC v2.0+ (Feng et al., 2021) also requires diagnostic bins for aerosols
 wrf_extra_coupling = "diag_so4_a1,diag_so4_a2,diag_so4_a3,diag_so4_a4,diag_nit_a1,diag_nit_a2,diag_nit_a3,diag_nit_a4,diag_nh4_a1,diag_nh4_a2,diag_nh4_a3,diag_nh4_a4,diag_ocpi_a1,diag_ocpi_a2,diag_ocpi_a3,diag_ocpi_a4,diag_ocpo_a1,diag_ocpo_a2,diag_ocpo_a3,diag_ocpo_a4,diag_bcpi_a1,diag_bcpi_a2,diag_bcpi_a3,diag_bcpi_a4,diag_bcpo_a1,diag_bcpo_a2,diag_bcpo_a3,diag_bcpo_a4,diag_seas_a1,diag_seas_a2,diag_seas_a3,diag_seas_a4,diag_dst_a1,diag_dst_a2,diag_dst_a3,diag_dst_a4,diag_soas_a1,diag_soas_a2,diag_soas_a3,diag_soas_a4,diag_so4_cw1,diag_so4_cw2,diag_so4_cw3,diag_so4_cw4,diag_nit_cw1,diag_nit_cw2,diag_nit_cw3,diag_nit_cw4,diag_nh4_cw1,diag_nh4_cw2,diag_nh4_cw3,diag_nh4_cw4,diag_ocpi_cw1,diag_ocpi_cw2,diag_ocpi_cw3,diag_ocpi_cw4,diag_ocpo_cw1,diag_ocpo_cw2,diag_ocpo_cw3,diag_ocpo_cw4,diag_bcpi_cw1,diag_bcpi_cw2,diag_bcpi_cw3,diag_bcpi_cw4,diag_bcpo_cw1,diag_bcpo_cw2,diag_bcpo_cw3,diag_bcpo_cw4,diag_seas_cw1,diag_seas_cw2,diag_seas_cw3,diag_seas_cw4,diag_dst_cw1,diag_dst_cw2,diag_dst_cw3,diag_dst_cw4,diag_soas_cw1,diag_soas_cw2,diag_soas_cw3,diag_soas_cw4,diag_water_a1,diag_water_a2,diag_water_a3,diag_water_a4,diag_num_a1,diag_num_a2,diag_num_a3,diag_num_a4,diag_num_cw1,diag_num_cw2,diag_num_cw3,diag_num_cw4"
@@ -63,6 +65,7 @@ wrf_extra_coupling = "diag_so4_a1,diag_so4_a2,diag_so4_a3,diag_so4_a4,diag_nit_a
 
 ############ NO USER CONFIGURABLE CODE BELOW ############
 assert len(cesm_aer) == len(cesm_aer_mass)
+nongas_upper = list(map(lambda x: x.upper(), nongas))
 
 if mode == "cesm":
 
@@ -81,10 +84,19 @@ if mode == "cesm":
 	# Final strings. Headers will be filled later, as we need to count.
 	solsym = ""
 	adv_mass = ""
+	drydep_list = ""
+	wetdep_list = ""
+
 	for spc_idx, spc in enumerate(parsed_spc_list):
 	    # invariants do not need to be skipped, they are actually duplicated
 	    # if spc[1] in cesm_invariants:
 	    #     continue
+
+	    # insert drydep / wetdep
+	    if spc[idx_DryDep] == "T" and (not spc[idx_spcName].upper() in nongas_upper):
+	    	drydep_list += "'" + spc[idx_spcName].upper() + "',"
+	    if spc[idx_WetDep] == "T" and (not spc[idx_spcName].upper() in nongas_upper):
+	    	wetdep_list += "'" + spc[idx_spcName].upper() + "',"
 	    
 	    # insert aerosols in between T and F. check for first F
 	    if first_nonadv and spc[2] == "F":
@@ -118,9 +130,13 @@ if mode == "cesm":
 	# strip last comma - ugly code
 	solsym = " ".join(solsym.rsplit(",", 1))
 	adv_mass = " ".join(adv_mass.rsplit(",", 1))
+	drydep_list = "".join(drydep_list.rsplit(",", 1))
+	wetdep_list = "".join(wetdep_list.rsplit(",", 1))
 
 	print(solsym)
 	print(adv_mass)
+	print("<drydep_list>" + drydep_list + "</drydep_list>")
+	print("<gas_wetdep_list>" + wetdep_list + "</gas_wetdep_list>")
 	print("update chem_mods.F90: gas_pcnst = " + str(total_counter))
 	print("update chem_mods.F90: nTracersMax = " + str(nadv_counter))
 	print("update bld/configure: $chem_nadv = " + str(nadv_counter))
