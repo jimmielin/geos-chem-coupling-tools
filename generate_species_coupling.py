@@ -11,14 +11,26 @@ from operator import itemgetter
 with open('v13.4.1.dat', 'r') as file:
     input_gc = file.read()
     
-out_regex = r"N:\s*(\d+)\s*(\w+)\s*Adv:\s*(F|T)\s*MW_g:\s*(\d+\.\d+)"
+out_regex = r"N:\s*(\d+)\s*(\w+)\s*Adv:\s*(F|T)\sDd:\s*(F|T)\sWd:\s*(F|T)\s*MW_g:\s*(\d+\.\d+)"
+# 0: N
+# 1: spc name
+# 2: is_adv
+# 3: is_drydep
+# 4: is_wetdep
+# 5: Mw_g
+idx_spcName = 1
+idx_Advect = 2
+idx_DryDep = 3
+idx_WetDep = 4
+idx_Mw_g = 5
+
 # cesm | wrfgc
 mode = "cesm"
 parsed_spc_list = re.findall(out_regex, input_gc)
 
 # sort by adv to keep them first - even though GC should keep them first
 # this is for sanity.
-parsed_spc_list.sort(key = lambda x: 0 if x[2] == "T" else 1)
+parsed_spc_list.sort(key = lambda x: 0 if x[idx_Advect] == "T" else 1)
 
 #
 # These are "quirky" species, which necessitate special handling
@@ -90,8 +102,8 @@ if mode == "cesm":
 	                solsym += "&\r\n"
 	                adv_mass += "&\r\n"
 	    
-	    solsym += "'" + spc[1].ljust(15) + "', "
-	    adv_mass += spc[3].rjust(14) + "_r8, "
+	    solsym += "'" + spc[idx_spcName].ljust(15) + "', "
+	    adv_mass += spc[idx_Mw_g].rjust(14) + "_r8, "
 	    
 	    pretty_column_counter += 1
 	    total_counter += 1
