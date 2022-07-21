@@ -1,0 +1,324 @@
+1: -------- RUNTIME SPECIES INFORMATION --------
+1: Unit:                     
+1:N:    1 ACET        Adv:   T MW_g: 58.090000
+1:N:    2 ACTA        Adv:   T MW_g: 60.060000
+1:N:    3 AERI        Adv:   T MW_g:126.900000
+1:N:    4 ALD2        Adv:   T MW_g: 44.060000
+1:N:    5 ALK4        Adv:   T MW_g: 58.120000
+1:N:    6 ASOA1       Adv:   T MW_g:150.000000
+1:N:    7 ASOA2       Adv:   T MW_g:150.000000
+1:N:    8 ASOA3       Adv:   T MW_g:150.000000
+1:N:    9 ASOAN       Adv:   T MW_g:150.000000
+1:N:   10 ASOG1       Adv:   T MW_g:150.000000
+1:N:   11 ASOG2       Adv:   T MW_g:150.000000
+1:N:   12 ASOG3       Adv:   T MW_g:150.000000
+1:N:   13 AONITA      Adv:   T MW_g:189.120000
+1:N:   14 AROMP4      Adv:   T MW_g: 68.080000
+1:N:   15 AROMP5      Adv:   T MW_g: 98.100000
+1:N:   16 ATOOH       Adv:   T MW_g: 90.090000
+1:N:   17 BALD        Adv:   T MW_g:106.120000
+1:N:   18 BCPI        Adv:   T MW_g: 12.010000
+1:N:   19 BCPO        Adv:   T MW_g: 12.010000
+1:N:   20 BENZ        Adv:   T MW_g: 78.120000
+1:N:   21 BENZP       Adv:   T MW_g:110.110000
+1:N:   22 Br          Adv:   T MW_g: 79.900000
+1:N:   23 Br2         Adv:   T MW_g:159.800000
+1:N:   24 BrCl        Adv:   T MW_g:115.450000
+1:N:   25 BrNO2       Adv:   T MW_g:125.910000
+1:N:   26 BrNO3       Adv:   T MW_g:141.910000
+1:N:   27 BrO         Adv:   T MW_g: 95.900000
+1:N:   28 BrSALA      Adv:   T MW_g: 79.900000
+1:N:   29 BrSALC      Adv:   T MW_g: 79.900000
+1:N:   30 BZCO3H      Adv:   T MW_g:138.120000
+1:N:   31 BZPAN       Adv:   T MW_g:183.120000
+1:N:   32 C2H2        Adv:   T MW_g: 26.050000
+1:N:   33 C2H4        Adv:   T MW_g: 28.050000
+1:N:   34 C2H6        Adv:   T MW_g: 30.080000
+1:N:   35 C3H8        Adv:   T MW_g: 44.110000
+1:N:   36 CCl4        Adv:   T MW_g:153.820000
+1:N:   37 CFC11       Adv:   T MW_g:137.370000
+1:N:   38 CFC113      Adv:   T MW_g:187.380000
+1:N:   39 CFC114      Adv:   T MW_g:170.920000
+1:N:   40 CFC115      Adv:   T MW_g:154.470000
+1:N:   41 CFC12       Adv:   T MW_g:120.910000
+1:N:   42 CH2Br2      Adv:   T MW_g:173.830000
+1:N:   43 CH2Cl2      Adv:   T MW_g: 84.930000
+1:N:   44 CH2I2       Adv:   T MW_g:267.840000
+1:N:   45 CH2IBr      Adv:   T MW_g:220.840000
+1:N:   46 CH2ICl      Adv:   T MW_g:176.380000
+1:N:   47 CH2O        Adv:   T MW_g: 30.030000
+1:N:   48 CH3Br       Adv:   T MW_g: 94.940000
+1:N:   49 CH3CCl3     Adv:   T MW_g:133.350000
+1:N:   50 CH3Cl       Adv:   T MW_g: 50.450000
+1:N:   51 CH3I        Adv:   T MW_g:141.940000
+1:N:   52 CH4         Adv:   T MW_g: 16.050000
+1:N:   53 CHBr3       Adv:   T MW_g:252.730000
+1:N:   54 CHCl3       Adv:   T MW_g:119.350000
+1:N:   55 Cl          Adv:   T MW_g: 35.450000
+1:N:   56 Cl2         Adv:   T MW_g: 70.900000
+1:N:   57 Cl2O2       Adv:   T MW_g:102.910000
+1:N:   58 ClNO2       Adv:   T MW_g: 81.450000
+1:N:   59 ClNO3       Adv:   T MW_g: 97.450000
+1:N:   60 ClO         Adv:   T MW_g: 51.450000
+1:N:   61 ClOO        Adv:   T MW_g: 67.450000
+1:N:   62 CLOCK       Adv:   T MW_g:  1.000000
+1:N:   63 CO          Adv:   T MW_g: 28.010000
+1:N:   64 CSL         Adv:   T MW_g:108.140000
+1:N:   65 DMS         Adv:   T MW_g: 62.130000
+1:N:   66 DST1        Adv:   T MW_g: 29.000000
+1:N:   67 DST2        Adv:   T MW_g: 29.000000
+1:N:   68 DST3        Adv:   T MW_g: 29.000000
+1:N:   69 DST4        Adv:   T MW_g: 29.000000
+1:N:   70 EOH         Adv:   T MW_g: 46.070000
+1:N:   71 ETHLN       Adv:   T MW_g:105.060000
+1:N:   72 ETHN        Adv:   T MW_g:107.070000
+1:N:   73 ETHP        Adv:   T MW_g: 78.070000
+1:N:   74 ETNO3       Adv:   T MW_g: 91.080000
+1:N:   75 ETP         Adv:   T MW_g: 62.080000
+1:N:   76 GLYC        Adv:   T MW_g: 60.060000
+1:N:   77 GLYX        Adv:   T MW_g: 58.040000
+1:N:   78 H1211       Adv:   T MW_g:165.360000
+1:N:   79 H1301       Adv:   T MW_g:148.910000
+1:N:   80 H2402       Adv:   T MW_g:259.820000
+1:N:   81 H2O         Adv:   T MW_g: 18.020000
+1:N:   82 H2O2        Adv:   T MW_g: 34.020000
+1:N:   83 HAC         Adv:   T MW_g: 74.080000
+1:N:   84 HBr         Adv:   T MW_g: 80.910000
+1:N:   85 HC5A        Adv:   T MW_g:100.130000
+1:N:   86 HCFC123     Adv:   T MW_g:152.930000
+1:N:   87 HCFC141b    Adv:   T MW_g:116.940000
+1:N:   88 HCFC142b    Adv:   T MW_g:100.500000
+1:N:   89 HCFC22      Adv:   T MW_g: 86.470000
+1:N:   90 HCl         Adv:   T MW_g: 36.450000
+1:N:   91 HCOOH       Adv:   T MW_g: 46.030000
+1:N:   92 HI          Adv:   T MW_g:127.910000
+1:N:   93 HMHP        Adv:   T MW_g: 64.050000
+1:N:   94 HMML        Adv:   T MW_g:102.100000
+1:N:   95 HMS         Adv:   T MW_g:111.100000
+1:N:   96 HNO2        Adv:   T MW_g: 47.010000
+1:N:   97 HNO3        Adv:   T MW_g: 63.010000
+1:N:   98 HNO4        Adv:   T MW_g: 79.010000
+1:N:   99 HOBr        Adv:   T MW_g: 96.910000
+1:N:  100 HOCl        Adv:   T MW_g: 52.450000
+1:N:  101 HOI         Adv:   T MW_g:143.890000
+1:N:  102 HONIT       Adv:   T MW_g:215.000000
+1:N:  103 HPALD1      Adv:   T MW_g:116.130000
+1:N:  104 HPALD2      Adv:   T MW_g:116.130000
+1:N:  105 HPALD3      Adv:   T MW_g:116.130000
+1:N:  106 HPALD4      Adv:   T MW_g:116.130000
+1:N:  107 HPETHNL     Adv:   T MW_g: 76.060000
+1:N:  108 I           Adv:   T MW_g:126.900000
+1:N:  109 I2          Adv:   T MW_g:253.800000
+1:N:  110 I2O2        Adv:   T MW_g:285.800000
+1:N:  111 I2O3        Adv:   T MW_g:301.800000
+1:N:  112 I2O4        Adv:   T MW_g:317.800000
+1:N:  113 IBr         Adv:   T MW_g:206.900000
+1:N:  114 ICHE        Adv:   T MW_g:116.130000
+1:N:  115 ICl         Adv:   T MW_g:162.450000
+1:N:  116 ICN         Adv:   T MW_g:145.130000
+1:N:  117 ICPDH       Adv:   T MW_g:150.150000
+1:N:  118 IDC         Adv:   T MW_g: 98.110000
+1:N:  119 IDCHP       Adv:   T MW_g:148.130000
+1:N:  120 IDHDP       Adv:   T MW_g:168.170000
+1:N:  121 IDHPE       Adv:   T MW_g:150.150000
+1:N:  122 IDN         Adv:   T MW_g:192.150000
+1:N:  123 IEPOXA      Adv:   T MW_g:106.140000
+1:N:  124 IEPOXB      Adv:   T MW_g:106.140000
+1:N:  125 IEPOXD      Adv:   T MW_g:106.140000
+1:N:  126 IHN1        Adv:   T MW_g:147.150000
+1:N:  127 IHN2        Adv:   T MW_g:147.150000
+1:N:  128 IHN3        Adv:   T MW_g:147.150000
+1:N:  129 IHN4        Adv:   T MW_g:147.150000
+1:N:  130 INDIOL      Adv:   T MW_g:102.000000
+1:N:  131 INO         Adv:   T MW_g:156.910000
+1:N:  132 INPB        Adv:   T MW_g:163.150000
+1:N:  133 INPD        Adv:   T MW_g:163.150000
+1:N:  134 IO          Adv:   T MW_g:142.900000
+1:N:  135 IONITA      Adv:   T MW_g: 14.010000
+1:N:  136 IONO        Adv:   T MW_g:172.910000
+1:N:  137 IONO2       Adv:   T MW_g:188.910000
+1:N:  138 IPRNO3      Adv:   T MW_g:105.110000
+1:N:  139 ISALA       Adv:   T MW_g:126.900000
+1:N:  140 ISALC       Adv:   T MW_g:126.900000
+1:N:  141 ISOP        Adv:   T MW_g: 68.130000
+1:N:  142 ITCN        Adv:   T MW_g:195.150000
+1:N:  143 ITHN        Adv:   T MW_g:197.170000
+1:N:  144 LIMO        Adv:   T MW_g:136.260000
+1:N:  145 LVOC        Adv:   T MW_g:154.190000
+1:N:  146 LVOCOA      Adv:   T MW_g:154.190000
+1:N:  147 MACR        Adv:   T MW_g: 70.100000
+1:N:  148 MACR1OOH    Adv:   T MW_g:102.100000
+1:N:  149 MAP         Adv:   T MW_g: 76.060000
+1:N:  150 MCRDH       Adv:   T MW_g:104.120000
+1:N:  151 MCRENOL     Adv:   T MW_g: 86.100000
+1:N:  152 MCRHN       Adv:   T MW_g:149.110000
+1:N:  153 MCRHNB      Adv:   T MW_g:149.110000
+1:N:  154 MCRHP       Adv:   T MW_g:120.120000
+1:N:  155 MCT         Adv:   T MW_g:124.000000
+1:N:  156 MEK         Adv:   T MW_g: 72.110000
+1:N:  157 MENO3       Adv:   T MW_g: 77.050000
+1:N:  158 MGLY        Adv:   T MW_g: 72.070000
+1:N:  159 MOH         Adv:   T MW_g: 32.050000
+1:N:  160 MONITA      Adv:   T MW_g: 14.010000
+1:N:  161 MONITS      Adv:   T MW_g:215.280000
+1:N:  162 MONITU      Adv:   T MW_g:215.280000
+1:N:  163 MP          Adv:   T MW_g: 48.050000
+1:N:  164 MPAN        Adv:   T MW_g:147.100000
+1:N:  165 MPN         Adv:   T MW_g: 93.050000
+1:N:  166 MSA         Adv:   T MW_g: 96.100000
+1:N:  167 MTPA        Adv:   T MW_g:136.260000
+1:N:  168 MTPO        Adv:   T MW_g:136.260000
+1:N:  169 MVK         Adv:   T MW_g: 70.090000
+1:N:  170 MVKDH       Adv:   T MW_g:105.130000
+1:N:  171 MVKHC       Adv:   T MW_g:102.100000
+1:N:  172 MVKHCB      Adv:   T MW_g:102.100000
+1:N:  173 MVKHP       Adv:   T MW_g:120.120000
+1:N:  174 MVKN        Adv:   T MW_g:149.120000
+1:N:  175 MVKPC       Adv:   T MW_g:118.100000
+1:N:  176 N2O         Adv:   T MW_g: 44.020000
+1:N:  177 N2O5        Adv:   T MW_g:108.020000
+1:N:  178 NH3         Adv:   T MW_g: 17.040000
+1:N:  179 NH4         Adv:   T MW_g: 18.050000
+1:N:  180 NIT         Adv:   T MW_g: 62.010000
+1:N:  181 NITs        Adv:   T MW_g: 31.400000
+1:N:  182 NO          Adv:   T MW_g: 30.010000
+1:N:  183 NO2         Adv:   T MW_g: 46.010000
+1:N:  184 NO3         Adv:   T MW_g: 62.010000
+1:N:  185 NPHEN       Adv:   T MW_g:139.110000
+1:N:  186 NPRNO3      Adv:   T MW_g:105.110000
+1:N:  187 O3          Adv:   T MW_g: 48.000000
+1:N:  188 OClO        Adv:   T MW_g: 67.450000
+1:N:  189 OCPI        Adv:   T MW_g: 12.010000
+1:N:  190 OCPO        Adv:   T MW_g: 12.010000
+1:N:  191 OCS         Adv:   T MW_g: 60.070000
+1:N:  192 OIO         Adv:   T MW_g:158.900000
+1:N:  193 PAN         Adv:   T MW_g:121.060000
+1:N:  194 pFe         Adv:   T MW_g: 55.850000
+1:N:  195 PHEN        Adv:   T MW_g: 94.110000
+1:N:  196 PIP         Adv:   T MW_g:186.280000
+1:N:  197 PP          Adv:   T MW_g: 92.110000
+1:N:  198 PPN         Adv:   T MW_g:135.080000
+1:N:  199 PROPNN      Adv:   T MW_g:119.080000
+1:N:  200 PRPE        Adv:   T MW_g: 42.090000
+1:N:  201 PRPN        Adv:   T MW_g:137.110000
+1:N:  202 PYAC        Adv:   T MW_g: 88.070000
+1:N:  203 R4N2        Adv:   T MW_g:119.100000
+1:N:  204 R4P         Adv:   T MW_g: 90.140000
+1:N:  205 RA3P        Adv:   T MW_g: 76.110000
+1:N:  206 RB3P        Adv:   T MW_g: 76.110000
+1:N:  207 RCHO        Adv:   T MW_g: 58.090000
+1:N:  208 RIPA        Adv:   T MW_g:118.150000
+1:N:  209 RIPB        Adv:   T MW_g:118.150000
+1:N:  210 RIPC        Adv:   T MW_g:118.150000
+1:N:  211 RIPD        Adv:   T MW_g:118.150000
+1:N:  212 RP          Adv:   T MW_g: 90.090000
+1:N:  213 SALA        Adv:   T MW_g: 31.400000
+1:N:  214 SALAAL      Adv:   T MW_g: 31.400000
+1:N:  215 SALACL      Adv:   T MW_g: 35.450000
+1:N:  216 SALC        Adv:   T MW_g: 31.400000
+1:N:  217 SALCAL      Adv:   T MW_g: 31.400000
+1:N:  218 SALCCL      Adv:   T MW_g: 35.450000
+1:N:  219 SO2         Adv:   T MW_g: 64.040000
+1:N:  220 SO4         Adv:   T MW_g: 96.060000
+1:N:  221 SO4s        Adv:   T MW_g: 31.400000
+1:N:  222 SOAGX       Adv:   T MW_g: 58.040000
+1:N:  223 SOAIE       Adv:   T MW_g:118.150000
+1:N:  224 SOAP        Adv:   T MW_g:150.000000
+1:N:  225 SOAS        Adv:   T MW_g:150.000000
+1:N:  226 TOLU        Adv:   T MW_g: 92.150000
+1:N:  227 TSOA0       Adv:   T MW_g:150.000000
+1:N:  228 TSOA1       Adv:   T MW_g:150.000000
+1:N:  229 TSOA2       Adv:   T MW_g:150.000000
+1:N:  230 TSOA3       Adv:   T MW_g:150.000000
+1:N:  231 TSOG0       Adv:   T MW_g:150.000000
+1:N:  232 TSOG1       Adv:   T MW_g:150.000000
+1:N:  233 TSOG2       Adv:   T MW_g:150.000000
+1:N:  234 TSOG3       Adv:   T MW_g:150.000000
+1:N:  235 XYLE        Adv:   T MW_g:106.180000
+1:N:  236 CO2         Adv:   F MW_g: 44.010000
+1:N:  237 LBRO2H      Adv:   F MW_g:159.130000
+1:N:  238 LBRO2N      Adv:   F MW_g:159.130000
+1:N:  239 BRO2        Adv:   F MW_g:159.130000
+1:N:  240 LISOPOH     Adv:   F MW_g: 68.130000
+1:N:  241 LISOPNO3    Adv:   F MW_g: 68.130000
+1:N:  242 LNRO2H      Adv:   F MW_g:159.170000
+1:N:  243 LNRO2N      Adv:   F MW_g:159.170000
+1:N:  244 NRO2        Adv:   F MW_g:159.170000
+1:N:  245 NAP         Adv:   F MW_g:128.180000
+1:N:  246 LTRO2H      Adv:   F MW_g:173.160000
+1:N:  247 LTRO2N      Adv:   F MW_g:173.160000
+1:N:  248 TRO2        Adv:   F MW_g:173.160000
+1:N:  249 LXRO2H      Adv:   F MW_g:187.190000
+1:N:  250 LXRO2N      Adv:   F MW_g:187.190000
+1:N:  251 XRO2        Adv:   F MW_g:187.190000
+1:N:  252 POx         Adv:   F MW_g: 48.000000
+1:N:  253 LOx         Adv:   F MW_g: 48.000000
+1:N:  254 PCO         Adv:   F MW_g: 28.010000
+1:N:  255 LCO         Adv:   F MW_g: 28.010000
+1:N:  256 PSO4        Adv:   F MW_g: 96.060000
+1:N:  257 LCH4        Adv:   F MW_g: 16.050000
+1:N:  258 PH2O2       Adv:   F MW_g: 34.020000
+1:N:  259 N           Adv:   F MW_g: 14.010000
+1:N:  260 ETO         Adv:   F MW_g: 61.060000
+1:N:  261 HPALD2OO    Adv:   F MW_g:147.120000
+1:N:  262 HPALD1OO    Adv:   F MW_g:147.120000
+1:N:  263 INA         Adv:   F MW_g:146.140000
+1:N:  264 C4HVP1      Adv:   F MW_g:103.110000
+1:N:  265 C4HVP2      Adv:   F MW_g:103.110000
+1:N:  266 IDNOO       Adv:   F MW_g:241.140000
+1:N:  267 ICNOO       Adv:   F MW_g:194.140000
+1:N:  268 ISOPNOO2    Adv:   F MW_g:196.160000
+1:N:  269 ROH         Adv:   F MW_g: 60.110000
+1:N:  270 BENZO       Adv:   F MW_g: 93.000000
+1:N:  271 ISOPNOO1    Adv:   F MW_g:196.160000
+1:N:  272 IDHNDOO2    Adv:   F MW_g:196.160000
+1:N:  273 IDHNDOO1    Adv:   F MW_g:196.160000
+1:N:  274 H           Adv:   F MW_g:  1.010000
+1:N:  275 ETOO        Adv:   F MW_g: 77.060000
+1:N:  276 BZCO3       Adv:   F MW_g:137.000000
+1:N:  277 AROMRO2     Adv:   F MW_g:127.000000
+1:N:  278 IHPOO1      Adv:   F MW_g:167.160000
+1:N:  279 IHPOO2      Adv:   F MW_g:167.160000
+1:N:  280 IHPOO3      Adv:   F MW_g:167.160000
+1:N:  281 IHPNDOO     Adv:   F MW_g:212.160000
+1:N:  282 BENZO2      Adv:   F MW_g:109.000000
+1:N:  283 ICHOO       Adv:   F MW_g:149.140000
+1:N:  284 CH3CHOO     Adv:   F MW_g: 60.060000
+1:N:  285 PRN1        Adv:   F MW_g:136.090000
+1:N:  286 MVKOHOO     Adv:   F MW_g:119.110000
+1:N:  287 MCROHOO     Adv:   F MW_g:119.110000
+1:N:  288 MACR1OO     Adv:   F MW_g:101.090000
+1:N:  289 PO2         Adv:   F MW_g: 91.100000
+1:N:  290 OLNN        Adv:   F MW_g:230.270000
+1:N:  291 OLND        Adv:   F MW_g:230.270000
+1:N:  292 ETO2        Adv:   F MW_g: 61.070000
+1:N:  293 IHPNBOO     Adv:   F MW_g:212.160000
+1:N:  294 LIMO2       Adv:   F MW_g:185.270000
+1:N:  295 IEPOXBOO    Adv:   F MW_g:149.140000
+1:N:  296 IEPOXAOO    Adv:   F MW_g:149.140000
+1:N:  297 IDHNBOO     Adv:   F MW_g:196.160000
+1:N:  298 CH2OO       Adv:   F MW_g: 46.030000
+1:N:  299 A3O2        Adv:   F MW_g: 75.100000
+1:N:  300 PIO2        Adv:   F MW_g:185.270000
+1:N:  301 OTHRO2      Adv:   F MW_g: 61.070000
+1:N:  302 INO2B       Adv:   F MW_g:162.140000
+1:N:  303 INO2D       Adv:   F MW_g:162.140000
+1:N:  304 IHOO1       Adv:   F MW_g:117.140000
+1:N:  305 IHOO4       Adv:   F MW_g:117.140000
+1:N:  306 MACRNO2     Adv:   F MW_g:180.100000
+1:N:  307 ATO2        Adv:   F MW_g: 89.080000
+1:N:  308 KO2         Adv:   F MW_g:101.090000
+1:N:  309 RCO3        Adv:   F MW_g: 89.080000
+1:N:  310 R4N1        Adv:   F MW_g:150.130000
+1:N:  311 R4O2        Adv:   F MW_g: 89.130000
+1:N:  312 B3O2        Adv:   F MW_g: 75.100000
+1:N:  313 MCO3        Adv:   F MW_g: 75.050000
+1:N:  314 MO2         Adv:   F MW_g: 47.040000
+1:N:  315 O1D         Adv:   F MW_g: 16.000000
+1:N:  316 OH          Adv:   F MW_g: 17.010000
+1:N:  317 HO2         Adv:   F MW_g: 33.010000
+1:N:  318 O           Adv:   F MW_g: 16.000000
+1:N:  319 H2          Adv:   F MW_g:  2.020000
+1:N:  320 N2          Adv:   F MW_g: 28.020000
+1:N:  321 O2          Adv:   F MW_g: 32.000000
+1:N:  322 RCOOH       Adv:   F MW_g: 74.090000
