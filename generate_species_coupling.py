@@ -8,10 +8,51 @@
 
 import re
 from operator import itemgetter
-with open('v13.4.1.dat', 'r') as file:
-    input_gc = file.read()
-    
-out_regex = r"N:\s*(\d+)\s*(\w+)\s*Adv:\s*(F|T)\sDd:\s*(F|T)\sWd:\s*(F|T)\s*MW_g:\s*(\d+\.\d+)"
+
+# choose parser_mode: "regex" for 13.4.x, or "yaml" for 14.1.0+
+parser_mode = "yaml"
+
+# choose input file:
+input_file_name = "v14.0.0.yml"
+
+if parser_mode == "regex":
+    with open(input_file_name, 'r') as file:
+        input_gc = file.read()
+        
+    out_regex = r"N:\s*(\d+)\s*(\w+)\s*Adv:\s*(F|T)\sDd:\s*(F|T)\sWd:\s*(F|T)\s*MW_g:\s*(\d+\.\d+)"
+    parsed_spc_list = re.findall(out_regex, input_gc)
+elif parser_mode == "yaml":
+    import yaml
+
+    with open(input_file_name, 'r') as file:
+        try:
+            input_gc_obj = yaml.safe_load(file)
+            parsed_spc_list = []
+            N = 0
+
+            # dump it into 5-tuples. no need to sort by advect - it will be sorted later on
+            for spc in input_gc_obj:
+                # KLUDGE: for some reason pyyaml parses 'NO' == False ???
+                if not spc:
+                    spcName = 'NO'
+                else:
+                    spcName = spc
+
+                N += 1
+                Is_Advected = 'T' if input_gc_obj[spc].get("Is_Advected", False) else 'F'
+                Is_DryDep = 'T' if input_gc_obj[spc].get("Is_DryDep", False) else 'F'
+                Is_WetDep = 'T' if input_gc_obj[spc].get("Is_WetDep", False) else 'F'
+                Mw_g = input_gc_obj[spc].get("MW_g", 0.00)
+
+                # heap alloc.
+                parsed_spc_list.append((N, spcName, Is_Advected, Is_DryDep, Is_WetDep, Mw_g))
+
+            print(parsed_spc_list)
+        except yaml.YAMLError as exc:
+            print(exc)
+else:
+    raise ValueError("parser_mode is neither regex nor yaml!")
+
 # 0: N
 # 1: spc name
 # 2: is_adv
@@ -26,7 +67,6 @@ idx_Mw_g = 5
 
 # cesm | wrfgc
 mode = "cesm"
-parsed_spc_list = re.findall(out_regex, input_gc)
 
 # sort by adv to keep them first - even though GC should keep them first
 # this is for sanity.
@@ -69,74 +109,74 @@ nongas_upper = list(map(lambda x: x.upper(), nongas))
 
 if mode == "cesm":
 
-	# CESM format...
-	# generate solsym, adv_mass arrays
-	# count total number of species first
-	total_num_parsed_m1 = len(parsed_spc_list) - 1
-	# print(total_num_parsed_m1)
+    # CESM format...
+    # generate solsym, adv_mass arrays
+    # count total number of species first
+    total_num_parsed_m1 = len(parsed_spc_list) - 1
+    # print(total_num_parsed_m1)
 
-	# first, loop through advected species which should go first
-	pretty_column_counter = 0
-	total_counter = 0
-	nadv_counter = 0
-	first_nonadv = True
+    # first, loop through advected species which should go first
+    pretty_column_counter = 0
+    total_counter = 0
+    nadv_counter = 0
+    first_nonadv = True
 
-	# Final strings. Headers will be filled later, as we need to count.
-	solsym = ""
-	adv_mass = ""
-	drydep_list = ""
-	wetdep_list = ""
+    # Final strings. Headers will be filled later, as we need to count.
+    solsym = ""
+    adv_mass = ""
+    drydep_list = ""
+    wetdep_list = ""
 
-	for spc_idx, spc in enumerate(parsed_spc_list):
-	    # invariants do not need to be skipped, they are actually duplicated
-	    # if spc[1] in cesm_invariants:
-	    #     continue
+    for spc_idx, spc in enumerate(parsed_spc_list):
+        # invariants do not need to be skipped, they are actually duplicated
+        # if spc[1] in cesm_invariants:
+        #     continue
 
-	    # insert drydep / wetdep
-	    if spc[idx_DryDep] == "T" and (not spc[idx_spcName].upper() in nongas_upper):
-	    	drydep_list += "'" + spc[idx_spcName].upper() + "',"
-	    if spc[idx_WetDep] == "T" and (not spc[idx_spcName].upper() in nongas_upper):
-	    	wetdep_list += "'" + spc[idx_spcName].upper() + "',"
-	    
-	    # insert aerosols in between T and F. check for first F
-	    if first_nonadv and spc[2] == "F":
-	        first_nonadv = False
-	        nadv_counter = total_counter + len(cesm_aer) # ...save up to now
-	        # insert cesm_aer, cesm_aer_mass ...
-	        for aer_idx, aer_spc in enumerate(cesm_aer):
-	            solsym += "'" + aer_spc.ljust(15) + "', "
-	            adv_mass += str(cesm_aer_mass[aer_idx]).rjust(14) + "_r8, "
+        # insert drydep / wetdep
+        if spc[idx_DryDep] == "T" and (not spc[idx_spcName].upper() in nongas_upper):
+            drydep_list += "'" + spc[idx_spcName].upper() + "',"
+        if spc[idx_WetDep] == "T" and (not spc[idx_spcName].upper() in nongas_upper):
+            wetdep_list += "'" + spc[idx_spcName].upper() + "',"
+        
+        # insert aerosols in between T and F. check for first F
+        if first_nonadv and spc[2] == "F":
+            first_nonadv = False
+            nadv_counter = total_counter + len(cesm_aer) # ...save up to now
+            # insert cesm_aer, cesm_aer_mass ...
+            for aer_idx, aer_spc in enumerate(cesm_aer):
+                solsym += "'" + aer_spc.ljust(15) + "', "
+                adv_mass += str(cesm_aer_mass[aer_idx]).rjust(14) + "_r8, "
 
-	            pretty_column_counter += 1
-	            total_counter += 1
-	            if pretty_column_counter == 3:
-	                pretty_column_counter = 0
-	                solsym += "&\r\n"
-	                adv_mass += "&\r\n"
-	    
-	    solsym += "'" + spc[idx_spcName].ljust(15) + "', "
-	    adv_mass += spc[idx_Mw_g].rjust(14) + "_r8, "
-	    
-	    pretty_column_counter += 1
-	    total_counter += 1
-	    if pretty_column_counter == 3:
-	        pretty_column_counter = 0
-	        solsym += "&\r\n"
-	        adv_mass += "&\r\n"
+                pretty_column_counter += 1
+                total_counter += 1
+                if pretty_column_counter == 3:
+                    pretty_column_counter = 0
+                    solsym += "&\r\n"
+                    adv_mass += "&\r\n"
+        
+        solsym += "'" + spc[idx_spcName].ljust(15) + "', "
+        adv_mass += str(spc[idx_Mw_g]).rjust(14) + "_r8, "
+        
+        pretty_column_counter += 1
+        total_counter += 1
+        if pretty_column_counter == 3:
+            pretty_column_counter = 0
+            solsym += "&\r\n"
+            adv_mass += "&\r\n"
 
-	solsym = "solsym(:" + str(total_counter) + ") = (/ &\r\n" + solsym + "/)"
-	adv_mass = "adv_mass(:" + str(total_counter) + ") = (/ &\r\n" + adv_mass + "/)"
+    solsym = "solsym(:" + str(total_counter) + ") = (/ &\r\n" + solsym + "/)"
+    adv_mass = "adv_mass(:" + str(total_counter) + ") = (/ &\r\n" + adv_mass + "/)"
 
-	# strip last comma - ugly code
-	solsym = " ".join(solsym.rsplit(",", 1))
-	adv_mass = " ".join(adv_mass.rsplit(",", 1))
-	drydep_list = "".join(drydep_list.rsplit(",", 1))
-	wetdep_list = "".join(wetdep_list.rsplit(",", 1))
+    # strip last comma - ugly code
+    solsym = " ".join(solsym.rsplit(",", 1))
+    adv_mass = " ".join(adv_mass.rsplit(",", 1))
+    drydep_list = "".join(drydep_list.rsplit(",", 1))
+    wetdep_list = "".join(wetdep_list.rsplit(",", 1))
 
-	print(solsym)
-	print(adv_mass)
-	print("<drydep_list>" + drydep_list + "</drydep_list>")
-	print("<gas_wetdep_list>" + wetdep_list + "</gas_wetdep_list>")
-	print("update chem_mods.F90: gas_pcnst = " + str(total_counter))
-	print("update chem_mods.F90: nTracersMax = " + str(nadv_counter))
-	print("update bld/configure: $chem_nadv = " + str(nadv_counter))
+    print(solsym)
+    print(adv_mass)
+    print("<drydep_list>" + drydep_list + "</drydep_list>")
+    print("<gas_wetdep_list>" + wetdep_list + "</gas_wetdep_list>")
+    print("update chem_mods.F90: gas_pcnst = " + str(total_counter))
+    print("update chem_mods.F90: nTracersMax = " + str(nadv_counter+1))
+    print("update bld/configure: $chem_nadv = " + str(nadv_counter+1))
