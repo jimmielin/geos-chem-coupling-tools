@@ -10,10 +10,10 @@ import re
 from operator import itemgetter
 
 # choose parser_mode: "regex" for 13.4.x, or "yaml" for 14.1.0+
-parser_mode = "yaml"
+parser_mode = "regex"
 
 # choose input file:
-input_file_name = "v14.0.0.yml"
+input_file_name = "v13.4.1.dat"
 
 if parser_mode == "regex":
     with open(input_file_name, 'r') as file:
@@ -154,7 +154,8 @@ if mode == "cesm":
                     solsym += "&\r\n"
                     adv_mass += "&\r\n"
         
-        solsym += "'" + spc[idx_spcName].ljust(15) + "', "
+        # solsym needs to be in uppercase or FLDLST for history will complain.
+        solsym += "'" + spc[idx_spcName].ljust(15).upper() + "', "
         adv_mass += str(spc[idx_Mw_g]).rjust(14) + "_r8, "
         
         pretty_column_counter += 1
