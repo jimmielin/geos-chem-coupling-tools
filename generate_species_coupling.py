@@ -35,6 +35,7 @@ nongas = ["AERI", "ASOAN", "ASOA1", "ASOA2", "ASOA3", "ASOG1", "ASOG2", "ASOG3",
 # ComplexSOA
 complexsoa = ["ASOA1", "ASOA2", "ASOA3", "ASOAN", "ASOG1", "ASOG2", "ASOG3", "TSOA0", "TSOA1", "TSOA2", "TSOA3", "TSOG0", "TSOG1", "TSOG2", "TSOG3"]
 complexsoa_svpoa = ["POA1", "POA2", "POG1", "POG2", "OPOA1", "OPOA2", "OPOG1", "OPOG2"]
+simplesoa = ["SOAS", "SOAP"]
 
 ###################
 #  --- CESM ---   #
@@ -143,6 +144,10 @@ if mode == "cesm":
         # if spc[1] in cesm_invariants:
         #     continue
 
+        # CESM-GC always uses Complex SOA.
+        if spc[idx_spcName] in simplesoa:
+            continue
+
         # insert drydep / wetdep
         if spc[idx_DryDep] == "T" and (not spc[idx_spcName].upper() in nongas_upper):
             drydep_list += "'" + spc[idx_spcName].upper() + "',"
@@ -202,12 +207,14 @@ elif mode == "wrfgc" or mode == "wrf":
     registry_chem_nongas = ""
 
     # gigc_set_wrf (GC -> WRF, update all entries)
-    gigc_set_wrf_nocomplexsoa = ""
+    gigc_set_wrf_other = ""
+    gigc_set_wrf_simplesoa = ""
     gigc_set_wrf_complexsoa = ""
     gigc_set_wrf_complexsoa_svpoa = ""
 
     # gigc_get_wrf (WRF -> GC, only advected)
-    gigc_get_wrf_nocomplexsoa = ""
+    gigc_get_wrf_other = ""
+    gigc_get_wrf_simplesoa = ""
     gigc_get_wrf_complexsoa = ""
     gigc_get_wrf_complexsoa_svpoa = ""
 
@@ -219,6 +226,17 @@ elif mode == "wrfgc" or mode == "wrf":
 
     # debug output
     gigc_idxdebug = ""
+
+    # mozbc .inp file
+    mozbc_input_file = """&control
+
+do_bc     = .true.,
+do_ic     = .true.,
+domain    = 1,
+
+dir_wrf = '/home/hplin/wrfgc/WRF/run/'
+dir_moz = '/home/hplin/wrfgc/mozbc/'
+fn_moz  = 'wrfgc_icbc_data_from_matlab.nc'\n\nspc_map ="""
 
     # for WRF-GC, for prettiness, the parsed_spc_list is sorted first
     parsed_spc_list.sort(key = lambda x: x[idx_spcName])
@@ -246,8 +264,13 @@ elif mode == "wrfgc" or mode == "wrf":
                 gigc_get_wrf_complexsoa += "    " + get_spec
             elif gcName in complexsoa_svpoa:
                 gigc_get_wrf_complexsoa_svpoa += "    " + get_spec
+            elif gcName in simplesoa:
+                gigc_get_wrf_simplesoa += "    " + get_spec
             else:
-                gigc_get_wrf_nocomplexsoa += get_spec
+                gigc_get_wrf_other += get_spec
+
+            # add to mozbc spec
+            mozbc_input_file += "        '" + wrfName + " -> " + gcName + "',\n"
 
         else:
             registry_chem_lines += "state   real   " + wrfName.ljust(10) + "  ikjft    chem        1         -         rhusdf=(bdy_interp:dt)  " + spcName_quoted.ljust(14) + " " + spcName_desc_quoted.ljust(27) + " \"ppmv\"\n"
@@ -271,14 +294,19 @@ elif mode == "wrfgc" or mode == "wrf":
             gigc_set_wrf_complexsoa += "    " + set_spec
         elif gcName in complexsoa_svpoa:
             gigc_get_wrf_complexsoa_svpoa += "    " + set_spec
+        elif gcName in simplesoa:
+            gigc_set_wrf_simplesoa += "    " + set_spec
         else:
-            gigc_set_wrf_nocomplexsoa += set_spec
+            gigc_set_wrf_other += set_spec
+
+    # Assemble the mozbc file
+    mozbc_input_file += "\n/\n"
 
     # Do some post-processing of the complexSOA code ...
-    gigc_set_wrf_complexsoa       = "if(Input_Opt%LSOA) then\n" + gigc_set_wrf_complexsoa + "endif\n"
+    gigc_set_wrf_complexsoa       = "if(Input_Opt%LSOA) then\n" + gigc_set_wrf_complexsoa + "else\n" + gigc_set_wrf_simplesoa + "\nendif\n"
     gigc_set_wrf_complexsoa_svpoa = "if(Input_Opt%LSVPOA) then\n" + gigc_set_wrf_complexsoa_svpoa + "endif\n"
 
-    gigc_get_wrf_complexsoa       = "if(Input_Opt%LSOA) then\n" + gigc_get_wrf_complexsoa + "endif\n"
+    gigc_get_wrf_complexsoa       = "if(Input_Opt%LSOA) then\n" + gigc_get_wrf_complexsoa + "else\n" + gigc_get_wrf_simplesoa + "\nendif\n"
     gigc_get_wrf_complexsoa_svpoa = "if(Input_Opt%LSVPOA) then\n" + gigc_get_wrf_complexsoa_svpoa + "endif\n"
 
     # Assemble the final registry entry
@@ -289,8 +317,8 @@ elif mode == "wrfgc" or mode == "wrf":
     registry_chem = "package   gchp                  chem_opt==233       -             chem:" + registry_chem_gas + "," + registry_chem_nongas + "," + wrf_extra_coupling
 
     # Assemble the final get routines in loop...
-    gigc_get_wrf = gigc_get_wrf_nocomplexsoa + "\n\n! Complex SOA species, only if available (hplin, 8/11/22)\n" + gigc_get_wrf_complexsoa + "\n" + gigc_get_wrf_complexsoa_svpoa
-    gigc_set_wrf = gigc_set_wrf_nocomplexsoa + "\n\n! Complex SOA species, only if available (hplin, 8/11/22)\n" + gigc_set_wrf_complexsoa + "\n" + gigc_set_wrf_complexsoa_svpoa
+    gigc_get_wrf = gigc_get_wrf_other + "\n\n! Complex SOA species, only if available (hplin, 8/11/22)\n" + gigc_get_wrf_complexsoa + "\n" + gigc_get_wrf_complexsoa_svpoa
+    gigc_set_wrf = gigc_set_wrf_other + "\n\n! Complex SOA species, only if available (hplin, 8/11/22)\n" + gigc_set_wrf_complexsoa + "\n" + gigc_set_wrf_complexsoa_svpoa
 
     # write all these to files...
     f = open("out/wrfgc_convert_state_mod_get.F90", "w")
@@ -313,10 +341,15 @@ elif mode == "wrfgc" or mode == "wrf":
     f.write(registry_chem_lines)
     f.close()
 
+    f = open("out/mozbc.inp", "w")
+    f.write(mozbc_input_file)
+    f.close()
+
     print("---- registry.chem chem_opt = 233 entry: ----")
     print(registry_chem)
     print("---------------------------------------------")
     print("Update get_last_gas in module_input_chem_data.F to correspond with the above registry entry.\n")
+    print("Update get_last_gas in module_chem_share.cpy (WRFv4+) to correspond with the above registry entry.\n")
 
 else:
     raise ValueError("Unrecognized mode option! Set wrfgc or cesm.")

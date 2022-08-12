@@ -3169,6 +3169,25 @@ SOAIE:
   WD_KcScaleFac: [1.0, 0.5, 1.0]
   WD_RainoutEff: [0.8, 0.0, 0.8]
   WD_RainoutEff_Luo: [0.4, 0.0, 0.8]
+SOAP:
+  FullName: SOA Precursor - lumped species for simplified SOA parameterization
+  Is_Advected: true
+  Is_Gas: true
+  MW_g: 150.0
+SOAS:
+  DD_DvzAerSnow: 0.03
+  DD_F0: 0.0
+  DD_Hstar: 0.0
+  FullName: SOA Simple - simplified non-volatile SOA parameterization
+  Is_Advected: true
+  Is_Aerosol: true
+  Is_DryDep: true
+  Is_WetDep: true
+  MW_g: 150.0
+  WD_AerScavEff: 0.8
+  WD_KcScaleFac: [1.0, 0.5, 1.0]
+  WD_RainoutEff: [0.8, 0.0, 0.8]
+  WD_RainoutEff_Luo: [0.4, 0.0, 0.8]
 TOLU:
   Formula: C7H8
   FullName: Toluene

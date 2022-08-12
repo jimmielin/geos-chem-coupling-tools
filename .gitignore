@@ -2,3 +2,4 @@
 out/*.F90
 out/*.out
 out/*.txt
+out/*.inp
