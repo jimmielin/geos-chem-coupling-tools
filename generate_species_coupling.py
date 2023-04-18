@@ -1,7 +1,7 @@
 ############################################
 # Generate species coupling code.
 # Used for GEOS-Chem with CESM and WRF-GC
-# (c) 2022 Haipeng Lin <myself@jimmielin.me>
+# (c) 2022-2023 Haipeng Lin <myself@jimmielin.me>
 #
 # Licensed under the GNU General Public License v2
 ############################################
@@ -15,7 +15,7 @@ from operator import itemgetter
 input_file_name = "v14.0.0.yml"
 
 # cesm | wrfgc
-mode = "wrfgc"
+mode = "cesm"
 
 # choose parser_mode: "regex" for 13.4.x, or "yaml" for 14.1.0+
 parser_mode = "yaml" if "yml" in input_file_name else "regex"
@@ -30,7 +30,8 @@ is_gc_14_and_above = "14" in input_file_name
 #
 
 # Non-gas-phase species ("Aerosols")
-nongas = ["AERI", "ASOAN", "ASOA1", "ASOA2", "ASOA3", "ASOG1", "ASOG2", "ASOG3", "AONITA", "BCPI", "BCPO", "BrSALA", "BrSALC", "DMS", "DST1", "DST2", "DST3", "DST4", "INDIOL", "IONITA", "ISALA", "ISALC", "ISN1OA", "ISN1OG", "ISOA1", "ISOA2", "ISOA3", "MONITA", "MSA", "NH4", "NIT", "NITs", "OCPI", "OCPO", "OPOA1", "OPOA2", "OPOG1", "OPOG2", "SALA", "SALC", "SALACl", "SALAAL", "SALCAL", "SALCCl", "SO4", "SO4s", "SOAIE", "SOAGX", "SOAME", "SOAMG", "SOAP", "SOAS", "TSOA0", "TSOA1", "TSOA2", "TSOA3", "TSOG0", "TSOG1", "TSOG2", "TSOG3", "pFe", "POA1", "POA2", "POG1", "POG2"]
+nongas = ["AERI", "ASOAN", "ASOA1", "ASOA2", "ASOA3", "ASOG1", "ASOG2", "ASOG3", "AONITA", "BCPI", "BCPO", "BrSALA", "BrSALC", "DMS", "DST1", "DST2", "DST3", "DST4", "INDIOL", "IONITA", "ISALA", "ISALC", "ISN1OA", "ISN1OG", "ISOA1", "ISOA2", "ISOA3", "MONITA", "MSA", "NH4", "NIT", "NITs", "OCPI", "OCPO", "OPOA1", "OPOA2", "OPOG1", "OPOG2", "SALA", "SALC", "SALACl", "SALAAL", "SALCAL", "SALCCl", "SO4", "SO4s", "SOAIE", "SOAGX", "SOAME", "SOAMG", "SOAP", "SOAS", "TSOA0", "TSOA1", "TSOA2", "TSOA3", "pFe", "POA1", "POA2", "POG1", "POG2"]
+handled_by_mam4 = ["SO4", "OCPI", "OCPO", "BCPI", "BCPO", "DST1", "DST2", "DST3", "DST4", "SALA", "SALC"]
 
 # ComplexSOA
 complexsoa = ["ASOA1", "ASOA2", "ASOA3", "ASOAN", "ASOG1", "ASOG2", "ASOG3", "TSOA0", "TSOA1", "TSOA2", "TSOA3", "TSOG0", "TSOG1", "TSOG2", "TSOG3"]
@@ -91,6 +92,15 @@ elif parser_mode == "yaml":
                 Is_WetDep = 'T' if input_gc_obj[spc].get("Is_WetDep", False) else 'F'
                 Mw_g = input_gc_obj[spc].get("MW_g", 0.00)
 
+                # for certain species that GEOS-Chem reports as non-advected, still
+                # report them as advected. this is because for CESM, non-advected species
+                # are not "constituents" and initial conditions cannot be specified for them,
+                # and they cannot be output. some special cases only here:
+                # OH, HO2 because we usually want output
+                # MO2 for research purposes
+                if spcName == "OH" or spcName == "HO2" or spcName == "MO2":
+                    Is_Advected = 'T'
+
                 # heap alloc.
                 parsed_spc_list.append((N, spcName, Is_Advected, Is_DryDep, Is_WetDep, Mw_g))
 
@@ -132,12 +142,15 @@ if mode == "cesm":
     total_counter = 0
     nadv_counter = 0
     first_nonadv = True
+    have_given_solsym_comment = False
 
     # Final strings. Headers will be filled later, as we need to count.
     solsym = ""
     adv_mass = ""
     drydep_list = ""
     wetdep_list = ""
+    aer_drydep_list = "'dst_a1','so4_a1','nh4_a1','pom_a1','pomff1_a1','pombb1_a1','soa_a1','bc_a1','ncl_a1','num_a1','so4_a2','nh4_a2','soa_a2','ncl_a2','dst_a2','num_a2','dst_a3','ncl_a3','so4_a3','pom_a3','bc_a3','num_a3','ncl_a4','so4_a4','pom_a4','pomff1_a4','pombb1_a4','bc_a4','nh4_a4','num_a4','dst_a5','so4_a5','nh4_a5','num_a5','ncl_a6','so4_a6','nh4_a6','num_a6','dst_a7','so4_a7','nh4_a7','num_a7','soa1_a1','soa1_a2','soa2_a1','soa2_a2','soa3_a1','soa3_a2','soa4_a1','soa4_a2','soa5_a1','soa5_a2','soaff1_a1','soaff2_a1','soaff3_a1','soaff4_a1','soaff5_a1','soabb1_a1','soabb2_a1','soabb3_a1','soabb4_a1','soabb5_a1','soabg1_a1','soabg2_a1','soabg3_a1','soabg4_a1','soabg5_a1','soaff1_a2','soaff2_a2','soaff3_a2','soaff4_a2','soaff5_a2','soabb1_a2','soabb2_a2','soabb3_a2','soabb4_a2','soabb5_a2','soabg1_a2','soabg2_a2','soabg3_a2','soabg4_a2','soabg5_a2',"
+    aer_wetdep_list = "'dst_a1','so4_a1','nh4_a1','pom_a1','pomff1_a1','pombb1_a1','soa_a1','bc_a1','ncl_a1','num_a1','so4_a2','nh4_a2','soa_a2','ncl_a2','dst_a2','num_a2','dst_a3','ncl_a3','so4_a3','pom_a3','bc_a3','num_a3','ncl_a4','so4_a4','pom_a4','pomff1_a4','pombb1_a4','bc_a4','nh4_a4','num_a4','dst_a5','so4_a5','nh4_a5','num_a5','ncl_a6','so4_a6','nh4_a6','num_a6','dst_a7','so4_a7','nh4_a7','num_a7','soa1_a1','soa1_a2','soa2_a1','soa2_a2','soa3_a1','soa3_a2','soa4_a1','soa4_a2','soa5_a1','soa5_a2','soaff1_a1','soaff2_a1','soaff3_a1','soaff4_a1','soaff5_a1','soabb1_a1','soabb2_a1','soabb3_a1','soabb4_a1','soabb5_a1','soabg1_a1','soabg2_a1','soabg3_a1','soabg4_a1','soabg5_a1','soaff1_a2','soaff2_a2','soaff3_a2','soaff4_a2','soaff5_a2','soabb1_a2','soabb2_a2','soabb3_a2','soabb4_a2','soabb5_a2','soabg1_a2','soabg2_a2','soabg3_a2','soabg4_a2','soabg5_a2',"
 
     for spc_idx, spc in enumerate(parsed_spc_list):
         # invariants do not need to be skipped, they are actually duplicated
@@ -149,10 +162,30 @@ if mode == "cesm":
             continue
 
         # insert drydep / wetdep
-        if spc[idx_DryDep] == "T" and (not spc[idx_spcName].upper() in nongas_upper):
-            drydep_list += "'" + spc[idx_spcName].upper() + "',"
-        if spc[idx_WetDep] == "T" and (not spc[idx_spcName].upper() in nongas_upper):
-            wetdep_list += "'" + spc[idx_spcName].upper() + "',"
+        if spc[idx_DryDep] == "T":
+            if (not spc[idx_spcName].upper() in nongas_upper):
+                drydep_list += "'" + spc[idx_spcName].upper() + "',"
+            else:
+                # also, exclude species handled by GC bulk-to-MAM4 modal coupling.
+                # these are overwritten at every time step and thus do not necessitate
+                # any handling.
+                if not spc[idx_spcName] in handled_by_mam4:
+                    drydep_list += "'" + spc[idx_spcName].upper() + "'," # aer_
+                    # note: temporarily, drydep of aerosols is handled in the gas list.
+                    # this remains to be discussed, but is the approach taken in previous
+                    # versions of CESM-GC.
+        if spc[idx_WetDep] == "T":
+            if (not spc[idx_spcName].upper() in nongas_upper):
+                wetdep_list += "'" + spc[idx_spcName].upper() + "',"
+            else:
+                # also, exclude species handled by GC bulk-to-MAM4 modal coupling.
+                # these are overwritten at every time step and thus do not necessitate
+                # any handling.
+                if not spc[idx_spcName] in handled_by_mam4:
+                    wetdep_list += "'" + spc[idx_spcName].upper() + "'," # aer_
+                    # note: temporarily, drydep of aerosols is handled in the gas list.
+                    # this remains to be discussed, but is the approach taken in previous
+                    # versions of CESM-GC.
         
         # insert aerosols in between T and F. check for first F
         if first_nonadv and spc[idx_Advect] == "F":
@@ -167,7 +200,11 @@ if mode == "cesm":
                 total_counter += 1
                 if pretty_column_counter == 3:
                     pretty_column_counter = 0
-                    solsym += "&\r\n"
+                    if not have_given_solsym_comment:
+                        solsym += "& ! Species after MAM aerosols are non-advected and will not be constituents\r\n"
+                        have_given_solsym_comment = True
+                    else:
+                        solsym += "&\r\n"
                     adv_mass += "&\r\n"
         
         # solsym needs to be in uppercase or FLDLST for history will complain.
@@ -189,14 +226,20 @@ if mode == "cesm":
     adv_mass = " ".join(adv_mass.rsplit(",", 1))
     drydep_list = "".join(drydep_list.rsplit(",", 1))
     wetdep_list = "".join(wetdep_list.rsplit(",", 1))
+    aer_drydep_list = "".join(aer_drydep_list.rsplit(",", 1))
+    aer_wetdep_list = "".join(aer_wetdep_list.rsplit(",", 1))
 
     print(solsym)
     print(adv_mass)
     print("<drydep_list>" + drydep_list + "</drydep_list>")
     print("<gas_wetdep_list>" + wetdep_list + "</gas_wetdep_list>")
+    print("<aer_drydep_list>" + aer_drydep_list + "</aer_drydep_list>")
+    print("<aer_wetdep_list>" + aer_wetdep_list + "</aer_wetdep_list>")
     print("update chem_mods.F90: gas_pcnst = " + str(total_counter))
     print("update chem_mods.F90: nTracersMax = " + str(nadv_counter+1))
     print("update bld/configure: $chem_nadv = " + str(nadv_counter+1))
+    print("update .xml compset files with correct dep_data_file for dry/wetdep list updates")
+    print("note aerosol dry and wetdep are currently in gas list for backward compatibility")
 
 elif mode == "wrfgc" or mode == "wrf":
 
