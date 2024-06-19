@@ -92,13 +92,19 @@ elif parser_mode == "yaml":
                 Is_WetDep = 'T' if input_gc_obj[spc].get("Is_WetDep", False) else 'F'
                 Mw_g = input_gc_obj[spc].get("MW_g", 0.00)
 
+
+                # in non-SVPOA simulations, CESM still considers NAP a non-advect tracer
+                # TODO add option if SVPOA
+                if spcName == "NAP":
+                    Is_Advected = 'F'
+
                 # for certain species that GEOS-Chem reports as non-advected, still
                 # report them as advected. this is because for CESM, non-advected species
                 # are not "constituents" and initial conditions cannot be specified for them,
                 # and they cannot be output. some special cases only here:
                 # OH, HO2 because we usually want output
                 # MO2, MCO3 (note GC MCO3 /= CAM-chem MCO3!!) for research purposes
-                #if spcName == "OH" or spcName == "HO2" or spcName == "MO2" or spcName == "MCO3":
+                #if spcName == "OH" or spcName == "HO2":
                 #    Is_Advected = 'T'
 
                 # heap alloc.
@@ -178,7 +184,10 @@ if mode == "cesm":
         # CESM-GC does not use semivolatile POA. For some reason, NAP is included
         # in the YML output even if it is not a SVPOA simulation.
         if spc[idx_spcName] in complexsoa_svpoa:
-            continue
+            # However, NAP is actually a non-advected tracer in a non-SVPOA sim
+            # because it is included in KPP. So it has to be manually overridden
+            if not spc[idx_spcName] == "NAP":
+                continue
 
         # insert drydep / wetdep
         if spc[idx_DryDep] == "T":
