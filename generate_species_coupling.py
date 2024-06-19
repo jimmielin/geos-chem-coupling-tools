@@ -1,7 +1,7 @@
 ############################################
 # Generate species coupling code.
 # Used for GEOS-Chem with CESM and WRF-GC
-# (c) 2022-2023 Haipeng Lin <myself@jimmielin.me>
+# (c) 2022-2024 Haipeng Lin <myself@jimmielin.me>
 #
 # Licensed under the GNU General Public License v2
 ############################################
@@ -12,7 +12,7 @@ from operator import itemgetter
 # User configurable options:
 
 # choose input file:
-input_file_name = "v14.0.0.yml"
+input_file_name = "v14.4.0.yml"
 
 # cesm | wrfgc
 mode = "cesm"
@@ -35,7 +35,7 @@ handled_by_mam4 = ["SO4", "OCPI", "OCPO", "BCPI", "BCPO", "DST1", "DST2", "DST3"
 
 # ComplexSOA
 complexsoa = ["ASOA1", "ASOA2", "ASOA3", "ASOAN", "ASOG1", "ASOG2", "ASOG3", "TSOA0", "TSOA1", "TSOA2", "TSOA3", "TSOG0", "TSOG1", "TSOG2", "TSOG3"]
-complexsoa_svpoa = ["POA1", "POA2", "POG1", "POG2", "OPOA1", "OPOA2", "OPOG1", "OPOG2"]
+complexsoa_svpoa = ["NAP", "POA1", "POA2", "POG1", "POG2", "OPOA1", "OPOA2", "OPOG1", "OPOG2"]
 simplesoa = ["SOAS", "SOAP"]
 
 ###################
@@ -97,9 +97,9 @@ elif parser_mode == "yaml":
                 # are not "constituents" and initial conditions cannot be specified for them,
                 # and they cannot be output. some special cases only here:
                 # OH, HO2 because we usually want output
-                # MO2 for research purposes
-                if spcName == "OH" or spcName == "HO2" or spcName == "MO2":
-                    Is_Advected = 'T'
+                # MO2, MCO3 (note GC MCO3 /= CAM-chem MCO3!!) for research purposes
+                #if spcName == "OH" or spcName == "HO2" or spcName == "MO2" or spcName == "MCO3":
+                #    Is_Advected = 'T'
 
                 # heap alloc.
                 parsed_spc_list.append((N, spcName, Is_Advected, Is_DryDep, Is_WetDep, Mw_g))
@@ -124,7 +124,20 @@ idx_Mw_g = 5
 
 # sort by adv to keep them first - even though GC should keep them first
 # this is for sanity.
-parsed_spc_list.sort(key = lambda x: 0 if x[idx_Advect] == "T" else 1)
+# parsed_spc_list.sort(key = lambda x: 0 if x[idx_Advect] == "T" else 1)
+
+# also sort by tracer name alphabetically (but make uppercase first)
+parsed_spc_list = sorted(parsed_spc_list, key = lambda x: (0 if x[idx_Advect] == "T" else 1, x[idx_spcName].upper()))
+
+# ClOO should follow ClO, do not sort CLOCK in between
+tmpA, tmpB = -1, -1
+for i, x in enumerate(parsed_spc_list):
+    if x[idx_spcName] == "ClOO":
+        tmpA = i
+    elif x[idx_spcName] == "CLOCK":
+        tmpB = i
+if tmpA > 0 and tmpB > 0 and tmpA > tmpB:
+    parsed_spc_list[tmpA], parsed_spc_list[tmpB] = parsed_spc_list[tmpB], parsed_spc_list[tmpA]
 
 assert len(cesm_aer) == len(cesm_aer_mass)
 nongas_upper = list(map(lambda x: x.upper(), nongas))
@@ -141,6 +154,7 @@ if mode == "cesm":
     pretty_column_counter = 0
     total_counter = 0
     nadv_counter = 0
+    nonadv_counter = 0
     first_nonadv = True
     have_given_solsym_comment = False
 
@@ -159,6 +173,11 @@ if mode == "cesm":
 
         # CESM-GC always uses Complex SOA.
         if spc[idx_spcName] in simplesoa:
+            continue
+
+        # CESM-GC does not use semivolatile POA. For some reason, NAP is included
+        # in the YML output even if it is not a SVPOA simulation.
+        if spc[idx_spcName] in complexsoa_svpoa:
             continue
 
         # insert drydep / wetdep
@@ -206,6 +225,9 @@ if mode == "cesm":
                     else:
                         solsym += "&\r\n"
                     adv_mass += "&\r\n"
+
+        if spc[idx_Advect] == "F":
+            nonadv_counter += 1
         
         # solsym needs to be in uppercase or FLDLST for history will complain.
         solsym += "'" + spc[idx_spcName].ljust(15).upper() + "', "
@@ -238,6 +260,7 @@ if mode == "cesm":
     print("update chem_mods.F90: gas_pcnst = " + str(total_counter))
     print("update chem_mods.F90: nTracersMax = " + str(nadv_counter+1))
     print("update bld/configure: $chem_nadv = " + str(nadv_counter+1))
+    print("update chem_mods.F90: $nslvd = " + str(nonadv_counter-1) + " (non-advect minus CO2)")
     print("update .xml compset files with correct dep_data_file for dry/wetdep list updates")
     print("note aerosol dry and wetdep are currently in gas list for backward compatibility")
 

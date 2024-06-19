@@ -310,6 +310,12 @@ BRO2:
   FullName: Peroxy radical from BENZ oxidation
   Is_Gas: true
   MW_g: 159.13
+BUTDI:
+  Formula: C4H4O2
+  FullName: Butenedial
+  Is_Advected: true
+  Is_Gas: true
+  MW_g: 84.07
 BZCO3:
   Formula: C7H5O3
   FullName: Acyl peroxy radical from benzaldehyde
@@ -604,6 +610,7 @@ CH3Cl:
   Is_Photolysis: true
   MW_g: 50.45
 CH3I:
+  Background_VV: 1.0e-20
   Formula: CH3I
   FullName: Methyl iodide
   Henry_CR: 3.6e+3
@@ -611,14 +618,21 @@ CH3I:
   Is_Advected: true
   Is_Gas: true
   Is_Photolysis: true
+  Is_Tracer: true
   MW_g: 141.94
+  Snk_Horiz: all
+  Snk_Mode: efolding
+  Snk_Period: 5
+  Snk_Vert: all
+  Src_Add: true
+  Src_Mode: HEMCO
 CH4:
   Background_VV: 1.8e-6
   Formula: CH4
   FullName: Methane
   Is_Advected: true
   Is_Gas: true
-  MW_g: 16.05
+  MW_g: 16.04
 CHBr3:
   Formula: CHBr3
   FullName: Bromoform
@@ -906,6 +920,20 @@ ETP:
   Is_Photolysis: true
   Is_WetDep: true
   MW_g: 62.08
+  WD_RetFactor: 2.0e-2
+FURA:
+  DD_F0: 1.0
+  DD_Hstar: 1.80e-1
+  Formula: C4H4O
+  FullName: Furan
+  Henry_CR: 6100.0
+  Henry_K0: 1.80e-1
+  Is_Advected: true
+  Is_DryDep: true
+  Is_Gas: true
+  Is_Photolysis: false
+  Is_WetDep: true
+  MW_g: 68.07
   WD_RetFactor: 2.0e-2
 GLYC:
   DD_F0: 1.0
@@ -1894,7 +1922,7 @@ LBRO2N:
 LCH4:
   FullName: Dummy species to track loss rate of CH4
   Is_Gas: true
-  MW_g: 16.05
+  MW_g: 16.04
 LCO:
   FullName: Dummy species to track loss rate of CO
   Is_Gas: true
@@ -2036,7 +2064,6 @@ MCO3:
   FullName: Peroxyacetyl radical
   Is_Gas: true
   MW_g: 75.05
-  Is_Advected: true
 MCRDH:
   DD_F0: 1.0
   DD_Hstar: 1.4e+6
@@ -2167,7 +2194,6 @@ MO2:
   FullName: Methylperoxy radical
   Is_Gas: true
   MW_g: 47.04
-  Is_Advected: true
 MOH:
   DD_F0: 1.0
   DD_Hstar: 2.03e+2
@@ -2505,10 +2531,11 @@ NITs:
   MW_g: 31.4
   Radius: 4.25e-6
   WD_AerScavEff: 1.0
+  WD_CoarseAer: true
   WD_KcScaleFac: [1.0, 0.5, 1.0]
   WD_RainoutEff: [1.0, 0.0, 1.0]
   WD_RainoutEff_Luo: [0.4, 0.0, 1.0]
-NO:
+'NO':
   Background_VV: 4.0e-13
   Formula: 'NO'
   FullName: Nitrogen oxide
@@ -2695,6 +2722,10 @@ PH2O2:
   FullName: Dummy species to track production rate of H2O2
   Is_Gas: true
   MW_g: 34.02
+PH2SO4:
+  FullName: SO4 from gas-phase chemistry
+  Is_Gas: true
+  MW_g: 96.06
 PHEN:
   DD_F0: 1.0
   DD_Hstar: 2.8e+3
@@ -2801,6 +2832,10 @@ PRPN:
   WD_RetFactor: 2.0e-2
 PSO4:
   FullName: Dummy species to track production of SO4
+  Is_Gas: true
+  MW_g: 96.06
+PSO4AQ:
+  FullName: SO4 from cloud chemistry
   Is_Gas: true
   MW_g: 96.06
 PYAC:
@@ -3138,6 +3173,7 @@ SO4s:
   MW_g: 31.4
   Radius: 4.25e-6
   WD_AerScavEff: 1.0
+  WD_CoarseAer: true
   WD_KcScaleFac: [1.0, 0.5, 1.0]
   WD_RainoutEff: [1.0, 0.0, 1.0]
   WD_RainoutEff_Luo: [0.4, 0.0, 1.0]
@@ -3167,25 +3203,6 @@ SOAIE:
   Is_DryDep: true
   Is_WetDep: true
   MW_g: 118.15
-  WD_AerScavEff: 0.8
-  WD_KcScaleFac: [1.0, 0.5, 1.0]
-  WD_RainoutEff: [0.8, 0.0, 0.8]
-  WD_RainoutEff_Luo: [0.4, 0.0, 0.8]
-SOAP:
-  FullName: SOA Precursor - lumped species for simplified SOA parameterization
-  Is_Advected: true
-  Is_Gas: true
-  MW_g: 150.0
-SOAS:
-  DD_DvzAerSnow: 0.03
-  DD_F0: 0.0
-  DD_Hstar: 0.0
-  FullName: SOA Simple - simplified non-volatile SOA parameterization
-  Is_Advected: true
-  Is_Aerosol: true
-  Is_DryDep: true
-  Is_WetDep: true
-  MW_g: 150.0
   WD_AerScavEff: 0.8
   WD_KcScaleFac: [1.0, 0.5, 1.0]
   WD_RainoutEff: [0.8, 0.0, 0.8]

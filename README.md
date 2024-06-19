@@ -20,3 +20,13 @@ To use YAML support for GEOS-Chem 14.0.0+, install `pyyaml` using `pip install p
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ```
 
+## generate_species_coupling
+This script will generate species-related information lists for CESM and WRF.
+
+**For CESM:** Generates `solsym`, `adv_mass` in `mo_sim_dat.F90`; dry and wet deposition lists for compset xml files; instructions to update `bld/configure`, `chem_mods.F90` for species counts.
+
+**For WRF:** Generates `WRFGC_Get_WRF`, `WRFGC_Set_WRF` two-way species conversion lists and index definitions; `registry.chem` species registry lists; `mozbc` configuration files for initial/boundary conditions.
+
+### Instructions
+1. Install and run corresponding version of GEOS-Chem "Classic". Run the model for any amount of time to generate an output species database `.yml` file in `OutputDir`.
+2. Move that `.yml` file to project directory, configure options in `generate_species_coupling.py` (file path, target model) then run `python generate_species_coupling.py`.
