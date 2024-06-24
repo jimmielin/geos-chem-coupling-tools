@@ -229,7 +229,10 @@ if mode == "cesm":
                 if pretty_column_counter == 3:
                     pretty_column_counter = 0
                     if not have_given_solsym_comment:
-                        solsym += "& ! Species after MAM aerosols are non-advected and will not be constituents\r\n"
+                        #solsym += "& ! Species after MAM aerosols are non-advected and will not be constituents\r\n"
+                        # hplin 6/24/24 remove this comment as it clutters the code
+                        # see https://github.com/geoschem/CAM/pull/34
+                        solsym += "&\r\n"
                         have_given_solsym_comment = True
                     else:
                         solsym += "&\r\n"
